@@ -1,0 +1,76 @@
+table.dataTable thead th {
+    font-size: 15px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    background: #f0fdfa;
+    font-weight: bold;
+}
+
+div.dt-container div.dt-length select {
+    width: 55px;
+}
+
+table.dataTable tbody td {
+    font-size: 15px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.dt-container .dt-length {
+    font-size: 15px;
+}
+
+.dt-container .dt-info {
+    font-size: 15px;
+}
+
+table.dataTable.dtr-column>tbody>tr>td.dtr-control:before, table.dataTable.dtr-column>tbody>tr>th.dtr-control:before, table.dataTable.dtr-column>tbody>tr>td.control:before, table.dataTable.dtr-column>tbody>tr>th.control:before {
+    content: '+';
+    display: inline-block;
+    box-sizing: border-box;
+    background: blue;
+    border-radius: 100%;
+    width: 18px;
+    height: 18px;
+    line-height: 20px;
+    color: #fff;
+    border: 1px solid #ddd;
+}
+
+table.dataTable.dtr-column>tbody>tr.dtr-expanded td.dtr-control:before, table.dataTable.dtr-column>tbody>tr.dtr-expanded th.dtr-control:before, table.dataTable.dtr-column>tbody>tr.dtr-expanded td.control:before, table.dataTable.dtr-column>tbody>tr.dtr-expanded th.control:before {
+    content: '-';
+    display: inline-block;
+    box-sizing: border-box;
+    background: red;
+    border-radius: 100%;
+    width: 18px;
+    height: 18px;
+    line-height: 16px;
+    color: #fff;
+    border: 1px solid #ddd;
+}
+
+div.dt-container div.dt-search input {
+    margin-left: .5em;
+    display: inline-block;
+    width: auto;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+}
+
+div.dt-container div.dt-search label {
+    font-size: 15px;
+}
+
+/* @media screen and (max-width: 767px) {
+    div.dt-container div.row {
+        margin-bottom: 0;
+        display: flex;
+    }
+} */
+@media screen and (max-width: 767px) {
+    div.dt-container div.row>* {
+        margin-bottom: .5rem;
+        display: flex;
+    }
+}
