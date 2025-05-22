@@ -14,6 +14,7 @@ class Admin extends Seeder
     public function run(): void
     { {
             \App\Models\AdminUser::factory()->create([
+                'role_id' => 1,
                 'name' => 'Admin',
                 'phno' => '09123456789',
                 'email' => 'admin@admin.com',

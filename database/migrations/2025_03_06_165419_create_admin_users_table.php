@@ -13,8 +13,11 @@ return new class extends Migration
     {
         Schema::create('admin_users', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('role_id');
             $table->string('name');
-            $table->string('phno')->nullable();
+            $table->string('phno');
+            $table->string('address')->nullable();
+            $table->string('photo')->nullable();
             $table->boolean('is_admin')->default(0);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

@@ -5,29 +5,51 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use App\Repositories\UserRoleRepository;
 use Yajra\DataTables\Facades\DataTables;
+use App\Http\Requests\UserRoleStoreRequest;
+use Exception;
 
 class RoleController extends Controller
 {
+    protected $userRoleRepository;
+    public function __construct(UserRoleRepository $userRoleRepository)
+    {
+        $this->userRoleRepository = $userRoleRepository;
+    }
+
     public function index()
     {
         return view('role.index');
     }
+
+    public function create()
+    {
+        return view('role.create');
+    }
+
+    public function store(UserRoleStoreRequest $request)
+    {
+        try {
+            $this->userRoleRepository->create([
+                'name' => $request->name,
+            ]);
+            return redirect()->route('role-createPage.index')->with('success', 'Successfully Created');
+        } catch (Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function edit($id)
+    {
+        $role = $this->userRoleRepository->find($id);
+        return view('role.edit', compact('role'));
+    }
     public function datatable(Request $request)
     {
         if ($request->ajax()) {
-            $model = Role::query();
-            return DataTables::eloquent($model)
-                ->editColumn('created_at', function ($data) {
-                    return Carbon::parse($data->created_at)->format('Y-m-d H:i:s');
-                })
-                ->addColumn('action', function ($data) {
-                    return null;
-                })
-                ->addColumn('responsive-icon', function ($data) {
-                    return null;
-                })
-                ->toJson();
+            return $this->userRoleRepository->datatable($request);
         }
     }
 }

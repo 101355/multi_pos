@@ -16,20 +16,24 @@
                     </div>
                 </div>
                 <div class="">
-                    <x-create-button href="{{ route('admin-user.create') }}"><i
+                    <x-create-button href="{{ route('role-createPage.create') }}"><i
                             class="fas fa-plus-circle">Create</i></x-create-button>
                 </div>
             </div>
             <!-- end page title -->
 
+            <x-flash-message></x-flash-message>
+            <x-success-message></x-success-message>
+            <x-error-message></x-error-message>
+
             <div class="row">
-                <x-card>
+                <x-card class="tw-pb-5">
                     <table class="table table-bordered Datatable-tb">
                         <thead>
                             <tr>
                                 <th class="text-center"></th>
                                 <th class="text-center">Name</th>
-                                <td class="text-center">Date</td>
+                                <th class="text-center">Date</th>
                                 <th class="text-center no-sort no-search">Action</th>
                             </tr>
                         </thead>
@@ -49,7 +53,7 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            new DataTable('.Datatable-tb', {
+            var table = new DataTable('.Datatable-tb', {
                 processing: true,
                 serverSide: true,
                 ajax: {
@@ -60,7 +64,7 @@
                 },
                 columns: [{
                         data: 'responsive-icon',
-                        class: 'text-center control'
+                        class: 'text-center'
                     },
                     {
                         data: 'name',
@@ -78,6 +82,12 @@
                 order: [
                     [2, 'desc']
                 ],
+                responsive: {
+                    details: {
+                        type: 'column',
+                        target: 0
+                    }
+                },
                 columnDefs: [{
                         targets: 'no-sort',
                         orderable: false
@@ -85,15 +95,41 @@
                     {
                         targets: 'no-search',
                         searchable: false
+                    },
+                    {
+                        targets: 0,
+                        orderable: false,
+                        searchable: false,
+                        className: 'control',
                     }
                 ],
-                responsive: {
-                    details: {
-                        type: 'column',
-                        target: 0
-                    }
-                }
             });
+
+            $(document).on('click', '.delete-button', function(event) {
+                event.preventDefault();
+
+                var url = $(this).data('url');
+
+                deleteDialog.fire().then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: url,
+                            method: 'DELETE',
+                            success: function(response) {
+                                table.ajax.reload();
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Deleted!',
+                                    text: 'Data has been deleted successfully.',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                            }
+                        })
+                    }
+                });
+            })
         })
     </script>
 @endpush
