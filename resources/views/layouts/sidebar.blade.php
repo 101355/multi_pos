@@ -51,14 +51,20 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('category.index') }}">
+                        <i class="fas fa-th-list"></i>
+                        <span> Category </span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('role-createPage.index') }}">
-                        <i class=" fas fa-users"></i>
+                        <i class="fas fa-user-friends"></i>
                         <span> User Role </span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('admin-user.index') }}">
-                        <i class=" fas fa-users"></i>
+                        <i class="fas fa-users"></i>
                         <span> Admin User</span>
                     </a>
                 </li>
