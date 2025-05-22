@@ -10,6 +10,7 @@ use App\Repositories\UserRoleRepository;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\UserRoleStoreRequest;
 use Exception;
+use App\Services\ResponseService;
 
 class RoleController extends Controller
 {
@@ -45,6 +46,29 @@ class RoleController extends Controller
     {
         $role = $this->userRoleRepository->find($id);
         return view('role.edit', compact('role'));
+    }
+
+    public function update($id, UserRoleStoreRequest $request)
+    {
+        try {
+            $this->userRoleRepository->update($id, [
+                'name' => $request->name,
+            ]);
+            return redirect()->route('role-createPage.index')->with('success', 'Successfully Updated');
+        } catch (Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $this->userRoleRepository->delete($id);
+
+            return ResponseService::success([], 'Successfully Deleted');
+        } catch (Exception $e) {
+            return ResponseService::fail($e->getMessage());
+        }
     }
     public function datatable(Request $request)
     {
