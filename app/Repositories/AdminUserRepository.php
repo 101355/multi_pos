@@ -2,18 +2,19 @@
 
 namespace App\Repositories;
 
-use Carbon\Carbon;
 use App\Models\AdminUser;
-use Illuminate\Http\Request;
-use Yajra\DataTables\Facades\DataTables;
+use App\Models\Role;
 use App\Repositories\Contracts\BaseRepository;
 
 class AdminUserRepository implements BaseRepository
 {
     protected $model;
+    protected $roleModel;
+
     public function __construct()
     {
         $this->model = AdminUser::class;
+        $this->roleModel = Role::class;
     }
 
     public function find($id)
@@ -44,19 +45,9 @@ class AdminUserRepository implements BaseRepository
         $record->delete();
     }
 
-    public function datatable(Request $request)
+    // get all roles
+    public function getAllRoles()
     {
-        $model = AdminUser::query();
-        return DataTables::eloquent($model)
-            ->editColumn('created_at', function ($admin_user) {
-                return Carbon::parse($admin_user->created_at)->format('Y-m-d H:i:s');
-            })
-            ->addColumn('action', function ($admin_user) {
-                return view('admin-user._action', compact('admin_user'));
-            })
-            ->addColumn('responsive-icon', function ($admin_user) {
-                return null;
-            })
-            ->toJson();
+        return $this->roleModel::all();
     }
 }

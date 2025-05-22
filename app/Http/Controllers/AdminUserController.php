@@ -20,31 +20,50 @@ class AdminUserController extends Controller
     {
         $this->adminUserRepository = $adminUserRepository;
     }
+
     public function index()
     {
+
         return view('admin-user.index');
     }
-
     public function datatable(Request $request)
     {
         if ($request->ajax()) {
-            return $this->adminUserRepository->datatable($request);
+            $model = AdminUser::query();
+            return DataTables::eloquent($model)
+                ->editColumn('created_at', function ($admin_user) {
+                    return Carbon::parse($admin_user->created_at)->format('Y-m-d H:i:s');
+                })
+                ->addColumn('action', function ($admin_user) {
+                    return view('admin-user._action', compact('admin_user'));
+                })
+                ->addColumn('role', function ($admin_user) {
+                    return $admin_user->role ? $admin_user->role->name : ''; // Return role name
+                })
+                ->addColumn('responsive-icon', function ($admin_user) {
+                    return null;
+                })
+                ->toJson();
         }
     }
 
     public function create()
     {
-        return view('admin-user.create');
+        $roles = $this->adminUserRepository->getAllRoles();
+
+        return view('admin-user.create', compact('roles'));
     }
 
     public function store(AdminUserStoreRequest $request)
     {
         try {
-            $this->adminUserRepository->create([
+            AdminUser::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'phno' => $request->phno,
-                'password' => Hash::make($request->password),
+                'role_id' => $request->role_id,
+                'address' => $request->address,
+                'password' => Hash::make($request->password)
             ]);
             return redirect()->route('admin-user.index')->with('success', 'Successfully Created');
         } catch (Exception $e) {
@@ -55,28 +74,34 @@ class AdminUserController extends Controller
     public function edit($id)
     {
         $admin_user = $this->adminUserRepository->find($id);
-        return view('admin-user.edit', compact('admin_user'));
+        $roles = $this->adminUserRepository->getAllRoles();
+
+        return view('admin-user.edit', compact('admin_user', 'roles'));
     }
 
-    public function update($id, AdminUserUpdateRequest $request)
+    public function update(AdminUser $admin_user, AdminUserUpdateRequest $request)
     {
         try {
-            $this->adminUserRepository->update($id, [
-                'name' => $request->name,
-                'email' => $request->email,
-                'phno' => $request->phno,
-                'password' => $request->password ? Hash::make($request->password) : $this->adminUserRepository->find($id)->password
-            ]);
+
+            dd($request->all());
+
+            $admin_user->name = $request->name;
+            $admin_user->email = $request->email;
+            $admin_user->phno = $request->phno;
+            $admin_user->role_id = $request->role_id;
+            $admin_user->address = $request->address;
+            $admin_user->password = $request->password ? Hash::make($request->password) : $admin_user->password;
+            $admin_user->update();
             return redirect()->route('admin-user.index')->with('success', 'Successfully Updated');
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage());
         }
     }
 
-    public function destroy($id)
+    public function destroy(AdminUser $admin_user)
     {
         try {
-            $this->adminUserRepository->delete($id);
+            $admin_user->delete();
 
             return ResponseService::success([], 'Successfully Deleted');
         } catch (Exception $e) {

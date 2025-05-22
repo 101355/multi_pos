@@ -33,8 +33,10 @@
                             <tr>
                                 <th class="text-center"></th>
                                 <th class="text-center">Name</th>
+                                <th class="text-center">Role</th>
                                 <th class="text-center">Email</th>
                                 <th class="text-center">Phone</th>
+                                <th class="text-center">Address</th>
                                 <th class="text-center">Date</th>
                                 <th class="text-center no-sort no-search">Action</th>
                             </tr>
@@ -73,11 +75,19 @@
                         class: 'text-center'
                     },
                     {
+                        data: 'role',
+                        class: 'text-center'
+                    },
+                    {
                         data: 'email',
                         class: 'text-center'
                     },
                     {
                         data: 'phno',
+                        class: 'text-center'
+                    },
+                    {
+                        data: 'address',
                         class: 'text-center'
                     },
                     {

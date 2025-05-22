@@ -35,6 +35,22 @@
                                     class="tw-mt-1 tw-block tw-w-full" :value="old('name', $admin_user->name)" />
                             </div>
 
+
+                            <div class="form-group">
+                                <x-input-label for="role" value="Role" />
+                                <select name="role_id" id="role_id"
+                                    class="tw-mt-1 tw-block tw-w-full tw-rounded-md tw-shadow-sm">
+                                    <option value="">-- Select Role --</option>
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->id }}"
+                                            {{ $admin_user->role_id == $role->id ? 'selected' : '' }}>
+                                            {{ $role->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+
                             <div class="form-group">
                                 <x-input-label for="email" value="Email" />
                                 <x-text-input id="email" name="email" type="email"
@@ -45,6 +61,11 @@
                                 <x-input-label for="phno" value="Phone" />
                                 <x-text-input id="phno" name="phno" type="text"
                                     class="tw-mt-1 tw-block tw-w-full" :value="old('phno', $admin_user->phno)" />
+                            </div>
+
+                            <div class="form-group">
+                                <x-input-label for="address" value="Address" />
+                                <textarea name="address" id="address" class="tw-mt-1 tw-block tw-w-full" rows="3" cols="10">{{ old('address', $admin_user->address) }}</textarea>
                             </div>
 
                             <div class="form-group">

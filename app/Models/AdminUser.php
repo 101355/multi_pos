@@ -22,6 +22,9 @@ class AdminUser extends Authenticatable implements MustVerifyEmail
         'email',
         'phno',
         'password',
+        'role_id',
+        'address',
+        'photo',
     ];
 
     /**
@@ -42,4 +45,9 @@ class AdminUser extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
 }
