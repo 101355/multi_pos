@@ -22,7 +22,7 @@
             <x-error-message></x-error-message>
 
             <div class="row">
-                <div class="col-md-8 offset-2">
+                <div class="col-md-8 col-12 offset-md-2 offset-0">
                     <x-card>
                         <form id="send-verification" method="post" action="{{ route('verification.send') }}">
                             @csrf

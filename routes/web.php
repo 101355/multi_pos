@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\DashboardController;
@@ -44,4 +45,8 @@ Route::middleware('auth:admin_users', 'verified')->group(function () {
     // Category
     Route::resource('category', CategoryController::class);
     Route::get('category-datatable', [CategoryController::class, 'datatable'])->name('category-datatable');
+
+    // Sub Category
+    Route::resource('sub-category', SubcategoryController::class);
+    Route::get('sub-category-datatable', [SubcategoryController::class, 'datatable'])->name('sub-category-datatable');
 });
