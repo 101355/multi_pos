@@ -77,10 +77,14 @@
                                     class="tw-mt-1 tw-block tw-w-full" :value="old('phno', $admin_user->phno)" />
                             </div>
 
+
+
                             <div class="form-group">
                                 <x-input-label for="address" value="Address" />
-                                <textarea name="address" id="address" class="tw-mt-1 tw-block tw-w-full" rows="3" cols="10">{{ old('address', $admin_user->address) }}</textarea>
+                                <x-textarea id="address" name="address"
+                                    rows="3">{{ old('address', $admin_user->address) }}</x-textarea>
                             </div>
+
 
                             <div class="form-group">
                                 <x-input-label for="password" value="Password" />
