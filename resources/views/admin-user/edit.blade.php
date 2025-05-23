@@ -36,10 +36,12 @@
                             </div>
 
 
+
+
                             <div class="form-group">
                                 <x-input-label for="role" value="Role" />
-                                <select name="role_id" id="role_id"
-                                    class="tw-mt-1 tw-block tw-w-full tw-rounded-md tw-shadow-sm">
+                                <x-select-input name="role_id" id="role_id" class="tw-mt-1 tw-block tw-w-full"
+                                    :disabled="false">
                                     <option value="">-- Select Role --</option>
                                     @foreach ($roles as $role)
                                         <option value="{{ $role->id }}"
@@ -47,7 +49,7 @@
                                             {{ $role->name }}
                                         </option>
                                     @endforeach
-                                </select>
+                                </x-select-input>
                             </div>
 
 
