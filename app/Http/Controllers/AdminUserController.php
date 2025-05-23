@@ -114,12 +114,6 @@ class AdminUserController extends Controller
                 // Save just the relative path
                 $admin_user->photo = 'admin_user/' . $filename;
             }
-
-
-
-
-
-
             $admin_user->password = $request->password ? Hash::make($request->password) : $admin_user->password;
             $admin_user->update();
             return redirect()->route('admin-user.index')->with('success', 'Successfully Updated');
