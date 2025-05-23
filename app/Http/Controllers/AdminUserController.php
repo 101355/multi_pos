@@ -91,30 +91,30 @@ class AdminUserController extends Controller
             $admin_user->address = $request->address;
 
             if ($request->hasFile('photo')) {
+
+                if ($admin_user->photo && file_exists(public_path($admin_user->photo))) {
+                    unlink(public_path($admin_user->photo));
+                }
+
                 $avatar = $request->file('photo');
                 $filename = time() . '.' . $avatar->getClientOriginalExtension();
 
+                // Ensure the directory exists
                 $directory = public_path('admin_user');
-                if (!file_exists($directory)) {
+                if (!is_dir($directory)) {
                     mkdir($directory, 0755, true);
                 }
 
-                $image = Image::read($avatar)->resize(300, 300, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
+                // Resize and compress image (Intervention Image v3 style)
+                Image::read($avatar)
+                    ->resize(300, 300, fn($c) => $c->aspectRatio())
+                    ->toJpeg(85) // reasonable quality
+                    ->save($directory . '/' . $filename);
 
-                $quality = 90;
-                $path = $directory . '/' . $filename;
-
-                do {
-                    // Save using positional parameter
-                    $image->toJpeg($quality)->save($path);
-                    $filesize = filesize($path);
-                    $quality -= 5;
-                } while ($filesize > 512000 && $quality > 10);
-
-                $admin_user->photo = $filename;
+                // Save just the relative path
+                $admin_user->photo = 'admin_user/' . $filename;
             }
+
 
 
 

@@ -45,7 +45,7 @@
                                     class="tw-mt-1 tw-block tw-w-full" />
 
                                 @if ($admin_user->photo)
-                                    <img src="{{ asset('admin_user/' . $admin_user->photo) }}" alt="Admin Image"
+                                    <img src="{{ asset($admin_user->photo) }}" alt="Admin Image"
                                         class="tw-mt-2 tw-w-32 tw-h-32 tw-object-cover">
                                 @endif
                             </div>
