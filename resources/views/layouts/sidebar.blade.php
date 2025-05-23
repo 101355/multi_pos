@@ -58,7 +58,7 @@
                 </li>
                 <li>
                     <a href="{{ route('sub-category.index') }}">
-                        <i class="fas fa-th-list"></i>
+                        <i class=" fas fa-layer-group"></i>
                         <span> Sub Category </span>
                     </a>
                 </li>
