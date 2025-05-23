@@ -17,16 +17,7 @@ class AdminUser extends Authenticatable implements MustVerifyEmail
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'phno',
-        'password',
-        'role_id',
-        'address',
-        'photo',
-    ];
-
+    protected $guarded = [];
     /**
      * The attributes that should be hidden for serialization.
      *

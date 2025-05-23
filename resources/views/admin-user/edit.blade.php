@@ -25,9 +25,11 @@
                 <div class="col-md-8 col-12 offset-md-2 offset-0">
                     <x-card>
                         <form method="post" action="{{ route('admin-user.update', $admin_user->id) }}"
-                            class="tw-mt-6 tw-space-y-6" id="submit">
+                            class="tw-mt-6 tw-space-y-6" id="submit" enctype="multipart/form-data">
                             @csrf
                             @method('put')
+
+
 
                             <div class="form-group">
                                 <x-input-label for="name" value="Name" />
@@ -37,6 +39,16 @@
 
 
 
+                            <div class="form-group">
+                                <x-input-label for="photo" value="Photo" />
+                                <x-text-input id="photo" name="photo" type="file"
+                                    class="tw-mt-1 tw-block tw-w-full" />
+
+                                @if ($admin_user->photo)
+                                    <img src="{{ asset('admin_user/' . $admin_user->photo) }}" alt="Admin Image"
+                                        class="tw-mt-2 tw-w-32 tw-h-32 tw-object-cover">
+                                @endif
+                            </div>
 
                             <div class="form-group">
                                 <x-input-label for="role" value="Role" />
@@ -55,7 +67,7 @@
 
                             <div class="form-group">
                                 <x-input-label for="email" value="Email" />
-                                <x-text-input id="email" name="email" type="email"
+                                <x-text-input type="text" id="email" name="email" type="email"
                                     class="tw-mt-1 tw-block tw-w-full" :value="old('email', $admin_user->email)" />
                             </div>
 
@@ -72,7 +84,7 @@
 
                             <div class="form-group">
                                 <x-input-label for="password" value="Password" />
-                                <x-text-input id="password" name="password" type="password"
+                                <x-text-input type="password" id="password" name="password" type="password"
                                     class="tw-mt-1 tw-block tw-w-full" />
                             </div>
 

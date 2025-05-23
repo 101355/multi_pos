@@ -11,6 +11,7 @@ use App\Repositories\AdminUserRepository;
 use App\Services\ResponseService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Intervention\Image\Laravel\Facades\Image;
 use Yajra\DataTables\Facades\DataTables;
 
 class AdminUserController extends Controller
@@ -83,13 +84,42 @@ class AdminUserController extends Controller
     {
         try {
 
-            dd($request->all());
-
             $admin_user->name = $request->name;
             $admin_user->email = $request->email;
             $admin_user->phno = $request->phno;
             $admin_user->role_id = $request->role_id;
             $admin_user->address = $request->address;
+
+            if ($request->hasFile('photo')) {
+                $avatar = $request->file('photo');
+                $filename = time() . '.' . $avatar->getClientOriginalExtension();
+
+                $directory = public_path('admin_user');
+                if (!file_exists($directory)) {
+                    mkdir($directory, 0755, true);
+                }
+
+                $image = Image::read($avatar)->resize(300, 300, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+
+                $quality = 90;
+                $path = $directory . '/' . $filename;
+
+                do {
+                    // Save using positional parameter
+                    $image->toJpeg($quality)->save($path);
+                    $filesize = filesize($path);
+                    $quality -= 5;
+                } while ($filesize > 512000 && $quality > 10);
+
+                $admin_user->photo = $filename;
+            }
+
+
+
+
+
             $admin_user->password = $request->password ? Hash::make($request->password) : $admin_user->password;
             $admin_user->update();
             return redirect()->route('admin-user.index')->with('success', 'Successfully Updated');

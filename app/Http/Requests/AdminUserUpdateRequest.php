@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
+
 use Illuminate\Foundation\Http\FormRequest;
 
 class AdminUserUpdateRequest extends FormRequest
@@ -21,10 +23,23 @@ class AdminUserUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        // Get the admin_user ID from the route
+        $adminUser = $this->route('admin_user');
+
+        // If route model binding returns a model instance, get the ID
+        $adminUserId = $adminUser instanceof \App\Models\AdminUser ? $adminUser->id : $adminUser;
+
         return [
             'name' => 'required|string|max:50',
-            'email' => 'required|email|unique:admin_users,email,' . $this->route('admin_user'),
-            'phno' => 'required|unique:admin_users,phno,' . $this->route('admin_user')
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('admin_users', 'email')->ignore($adminUserId),
+            ],
+            'phno' => [
+                'required',
+                Rule::unique('admin_users', 'phno')->ignore($adminUserId),
+            ],
         ];
     }
 }

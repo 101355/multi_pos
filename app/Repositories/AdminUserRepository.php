@@ -33,6 +33,7 @@ class AdminUserRepository implements BaseRepository
 
     public function update($id, array $data)
     {
+
         $record = $this->model::find($id);
         $record->update($data);
 
