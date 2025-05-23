@@ -57,6 +57,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('sub-category.index') }}">
+                        <i class=" fas fa-layer-group"></i>
+                        <span> Sub Category </span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('role-createPage.index') }}">
                         <i class="fas fa-user-friends"></i>
                         <span> User Role </span>

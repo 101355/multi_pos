@@ -23,7 +23,7 @@
             <!-- end page title -->
 
             <div class="row">
-                <div class="col-md-8 offset-2">
+                <div class="col-md-8 col-12 offset-md-2 offset-0">
                     <x-card>
                         <form method="post" action="{{ route('change-password.update') }}" class="tw-mt-6 tw-space-y-6"
                             id="submit">
