@@ -69,6 +69,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('unit.index') }}">
+                        <i class=" fas fa-layer-group"></i>
+                        <span> Unit </span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('role-createPage.index') }}">
                         <i class="fas fa-user-friends"></i>
                         <span> User Role </span>

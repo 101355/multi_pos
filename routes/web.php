@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\UnitController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +52,11 @@ Route::middleware('auth:admin_users', 'verified')->group(function () {
     Route::resource('sub-category', SubcategoryController::class);
     Route::get('sub-category-datatable', [SubcategoryController::class, 'datatable'])->name('sub-category-datatable');
 
-    // Sub Category
+    // Supplier
     Route::resource('supplier', SupplierController::class);
     Route::get('supplier-datatable', [SupplierController::class, 'datatable'])->name('supplier-datatable');
+
+    // Unit
+    Route::resource('unit', UnitController::class);
+    Route::get('unit-datatable', [UnitController::class, 'datatable'])->name('unit-datatable');
 });
