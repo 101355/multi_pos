@@ -70,7 +70,7 @@
                 </li>
                 <li>
                     <a href="{{ route('unit.index') }}">
-                        <i class=" fas fa-layer-group"></i>
+                        <i class="fas fa-solid fa-database"></i>
                         <span> Unit </span>
                     </a>
                 </li>
