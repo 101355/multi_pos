@@ -75,6 +75,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('warehouse.index') }}">
+                        <i class="fas fa-solid fa-warehouse"></i>
+                        <span> Warehouse </span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('role-createPage.index') }}">
                         <i class="fas fa-user-friends"></i>
                         <span> User Role </span>

@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\WarehouseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,4 +60,9 @@ Route::middleware('auth:admin_users', 'verified')->group(function () {
     // Unit
     Route::resource('unit', UnitController::class);
     Route::get('unit-datatable', [UnitController::class, 'datatable'])->name('unit-datatable');
+
+
+    // Unit
+    Route::resource('warehouse', WarehouseController::class);
+    Route::get('warehouse-datatable', [WarehouseController::class, 'datatable'])->name('warehouse-datatable');
 });
