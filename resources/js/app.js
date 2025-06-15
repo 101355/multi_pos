@@ -2,6 +2,17 @@ import "./bootstrap";
 
 import Alpine from "alpinejs";
 import Swal from "sweetalert2/dist/sweetalert2.js";
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
+
+document.addEventListener("DOMContentLoaded", function () {
+    flatpickr("#dash-daterange", {
+      altInput: true,
+      mode: "range",
+      altFormat: "F j, Y",
+      defaultDate: "today"
+    });
+  });
 
 window.Swal = Swal;
 window.Alpine = Alpine;
