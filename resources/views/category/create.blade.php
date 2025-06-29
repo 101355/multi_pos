@@ -34,6 +34,20 @@
                                     class="tw-mt-1 tw-block tw-w-full" :value="old('name')" />
                             </div>
 
+                            <div class="form-group">
+                                <x-input-label for="warehouse_id" value="Warehouse" />
+                                <x-select-input name="warehouse_id" id="warehouse_id" class="tw-mt-1 tw-block tw-w-full"
+                                    :disabled="false">
+                                    <option value="">-- Select Warehouse --</option>
+                                    @foreach ($warehouses as $warehouse)
+                                        <option value="{{ $warehouse->id }}"
+                                            {{ old('warehouse_id') == $warehouse->id ? 'selected' : '' }}>
+                                            {{ $warehouse->name }}
+                                        </option>
+                                    @endforeach
+                                </x-select-input>
+                            </div>
+
                             <div class="tw-flex tw-justify-center tw-items-center tw-gap-4">
                                 <x-confirm_button>{{ __('Confirm') }}</x-confirm_button>
                                 <x-cancel_button href="{{ route('category.index') }}">{{ __('Cancel') }}</x-cancel_button>

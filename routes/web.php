@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\WarehouseController;
@@ -52,6 +53,7 @@ Route::middleware('auth:admin_users', 'verified')->group(function () {
     // Sub Category
     Route::resource('sub-category', SubcategoryController::class);
     Route::get('sub-category-datatable', [SubcategoryController::class, 'datatable'])->name('sub-category-datatable');
+    Route::post('/category_get_category', [SubcategoryController::class, 'get_category'])->name('category_get_category');
 
     // Supplier
     Route::resource('supplier', SupplierController::class);
@@ -62,7 +64,13 @@ Route::middleware('auth:admin_users', 'verified')->group(function () {
     Route::get('unit-datatable', [UnitController::class, 'datatable'])->name('unit-datatable');
 
 
-    // Unit
+    // Warehouse
     Route::resource('warehouse', WarehouseController::class);
     Route::get('warehouse-datatable', [WarehouseController::class, 'datatable'])->name('warehouse-datatable');
+
+    // Product
+    Route::resource('product', ProductController::class);
+    Route::post('/category/subcategories', [ProductController::class, 'get_category'])->name('category.subcategories');
+
+    Route::get('warehouse-datatable', [ProductController::class, 'datatable'])->name('warehouse-datatable');
 });

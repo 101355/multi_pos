@@ -28,15 +28,28 @@
                             id="submit">
                             @csrf
 
+
+                            <div class="form-group">
+                                <x-input-label for="warehouse_id" value="Warehouse" />
+                                <x-select-input name="warehouse_id" id="warehouse_id" class="tw-mt-1 tw-block tw-w-full"
+                                    :disabled="false">
+                                    <option value="">-- Select Warehouse --</option>
+                                    @foreach ($warehouses as $warehouse)
+                                        <option value="{{ $warehouse->id }}"
+                                            {{ old('warehouse_id') == $warehouse->id ? 'selected' : '' }}>
+                                            {{ $warehouse->name }}
+                                        </option>
+                                    @endforeach
+                                </x-select-input>
+                            </div>
+
                             <div class="form-group">
                                 <x-input-label for="category_id" value="Category" />
 
                                 <x-select-input name="category_id" id="category_id" class="tw-mt-1 tw-block tw-w-full"
                                     :disabled="false">
                                     <option value="">Select a category</option>
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                    @endforeach
+
                                 </x-select-input>
                             </div>
 
@@ -64,3 +77,39 @@
 @push('scripts')
     {!! JsValidator::formRequest('App\Http\Requests\SubCategoryRequest', '#submit') !!}
 @endpush
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#warehouse_id').on('change', function() {
+            const warehouseId = $(this).val();
+            console.log(warehouseId);
+            // Clear existing options
+            $('#category_id').html('<option value="">Loading...</option>');
+
+            if (warehouseId) {
+                $.ajax({
+                    url: '{{ route('category_get_category') }}', // or your actual route
+                    type: 'POST',
+                    data: {
+                        warehouse_id: warehouseId
+                    },
+                    success: function(categories) {
+                        let options = '<option value="">Select a category</option>';
+                        categories.forEach(function(category) {
+                            options +=
+                                `<option value="${category.id}">${category.name}</option>`;
+                        });
+                        $('#category_id').html(options);
+                    },
+                    error: function() {
+                        $('#category_id').html(
+                            '<option value="">No categories found</option>');
+                    }
+                });
+            } else {
+                $('#category_id').html('<option value="">Select a category</option>');
+            }
+        });
+    });
+</script>

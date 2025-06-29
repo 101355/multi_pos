@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Services\ResponseService;
 use App\Http\Requests\SubCategoryRequest;
+use App\Models\Warehouse;
 use App\Repositories\SubCategoryRepository;
 
 class SubcategoryController extends Controller
@@ -24,7 +25,8 @@ class SubcategoryController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('sub-category.create', compact('categories'));
+        $warehouses = Warehouse::all();
+        return view('sub-category.create', compact('categories', 'warehouses'));
     }
 
     public function store(SubCategoryRequest $request)
@@ -32,6 +34,7 @@ class SubcategoryController extends Controller
         try {
             $this->subCategoryRepository->create([
                 'category_id' => $request->category_id,
+                'warehouse_id' => $request->warehouse_id,
                 'name' => $request->name,
             ]);
             return redirect()->route('sub-category.index')->with('success', 'Successfully Created');
@@ -43,8 +46,10 @@ class SubcategoryController extends Controller
     public function edit($id)
     {
         $categories = Category::all();
+        $warehouses = Warehouse::all();
+
         $sub_category = $this->subCategoryRepository->find($id);
-        return view('sub-category.edit', compact('sub_category', 'categories'));
+        return view('sub-category.edit', compact('sub_category', 'categories', 'warehouses'));
     }
 
     public function update($id, SubCategoryRequest $request)
@@ -52,6 +57,7 @@ class SubcategoryController extends Controller
         try {
             $this->subCategoryRepository->update($id, [
                 'category_id' => $request->category_id,
+                'warehouse_id' => $request->warehouse_id,
                 'name' => $request->name,
             ]);
             return redirect()->route('sub-category.index')->with('success', 'Successfully Updated');
@@ -75,5 +81,13 @@ class SubcategoryController extends Controller
         if ($request->ajax()) {
             return $this->subCategoryRepository->datatable($request);
         }
+    }
+
+    public function get_category(Request $request)
+    {
+        $warehouse_id = $request->query('warehouse_id');
+        // info($warehouse_id);
+        $categories = Category::where('warehouse_id', $warehouse_id)->get();
+        return response()->json($categories);
     }
 }

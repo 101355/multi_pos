@@ -52,6 +52,9 @@ class CategoryRepository implements BaseRepository
             ->editColumn('created_at', function ($category) {
                 return Carbon::parse($category->created_at)->format('Y-m-d H:i:s');
             })
+            ->addColumn('warehouse_id', function ($data) {
+                return $data->warehouse ? $data->warehouse->name : '-';
+            })
             ->addColumn('action', function ($category) {
                 return view('category._action', compact('category'));
             })

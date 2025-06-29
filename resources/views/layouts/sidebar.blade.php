@@ -51,6 +51,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('product.index') }}">
+                        <i class="fas fa-cubes"></i>
+                        <span>Product</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('supplier.index') }}">
                         <i class="fas fa-user-tie"></i>
                         <span>Supplier</span>

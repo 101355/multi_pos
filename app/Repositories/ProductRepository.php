@@ -2,18 +2,26 @@
 
 namespace App\Repositories;
 
+use App\Models\Category;
+use App\Models\Product;
 use Carbon\Carbon;
 use App\Models\Subcategory;
+use App\Models\Warehouse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use App\Repositories\Contracts\BaseRepository;
 
-class SubCategoryRepository implements BaseRepository
+class ProductRepository implements BaseRepository
 {
     protected $model;
+    protected $warehouseModel;
+    protected $cateogryModel;
+
     public function __construct()
     {
-        $this->model = Subcategory::class;
+        $this->model = Product::class;
+        $this->warehouseModel = Warehouse::class;
+        $this->cateogryModel = Category::class;
     }
 
     public function find($id)
@@ -54,9 +62,6 @@ class SubCategoryRepository implements BaseRepository
             ->addColumn('category_id', function ($data) {
                 return $data->category ? $data->category->name : '-';
             })
-            ->addColumn('warehouse_id', function ($data) {
-                return $data->warehouse ? $data->warehouse->name : '-';
-            })
             ->addColumn('action', function ($sub_category) {
                 return view('sub-category._action', compact('sub_category'));
             })
@@ -64,5 +69,16 @@ class SubCategoryRepository implements BaseRepository
                 return null;
             })
             ->toJson();
+    }
+
+
+    public function getAllWarehouse()
+    {
+        return $this->warehouseModel::all();
+    }
+
+    public function getAllCategory()
+    {
+        return $this->cateogryModel::all();
     }
 }
