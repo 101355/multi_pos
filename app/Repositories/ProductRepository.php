@@ -54,18 +54,16 @@ class ProductRepository implements BaseRepository
 
     public function datatable(Request $request)
     {
-        $model = Subcategory::query();
+        $model = Product::query();
         return DataTables::eloquent($model)
-            ->editColumn('created_at', function ($sub_category) {
-                return Carbon::parse($sub_category->created_at)->format('Y-m-d H:i:s');
+            ->editColumn('created_at', function ($product) {
+                return Carbon::parse($product->created_at)->format('Y-m-d H:i:s');
             })
-            ->addColumn('category_id', function ($data) {
-                return $data->category ? $data->category->name : '-';
+
+            ->addColumn('action', function ($product) {
+                return view('product._action', compact('product'));
             })
-            ->addColumn('action', function ($sub_category) {
-                return view('sub-category._action', compact('sub_category'));
-            })
-            ->addColumn('responsive-icon', function ($sub_category) {
+            ->addColumn('responsive-icon', function ($product) {
                 return null;
             })
             ->toJson();

@@ -33,7 +33,11 @@
                             <tr>
                                 <th class="text-center"></th>
                                 <th class="text-center">Name</th>
-                                <th class="text-center">Date</th>
+                                <th class="text-center">Description</th>
+
+                                <th class="text-center">Item Type</th>
+                                <th class="text-center">Barcode</th>
+                                <th class="text-center">Expired Date</th>
                                 <th class="text-center no-sort no-search">Action</th>
                             </tr>
                         </thead>
@@ -57,7 +61,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('category-datatable') }}",
+                    url: "{{ route('product-datatable') }}",
                     data: function(d) {
 
                     }
@@ -67,11 +71,23 @@
                         class: 'text-center'
                     },
                     {
-                        data: 'name',
+                        data: 'item_name',
                         class: 'text-center'
                     },
                     {
-                        data: 'created_at',
+                        data: 'description',
+                        class: 'text-center'
+                    },
+                    {
+                        data: 'item_type',
+                        class: 'text-center'
+                    },
+                    {
+                        data: 'barcode',
+                        class: 'text-center'
+                    },
+                    {
+                        data: 'expired_date',
                         class: 'text-center'
                     },
                     {

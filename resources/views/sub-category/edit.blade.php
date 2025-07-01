@@ -100,7 +100,9 @@
                     url: '{{ route('category_get_category') }}', // or your actual route
                     type: 'POST',
                     data: {
-                        warehouse_id: warehouseId
+                        warehouse_id: warehouseId,
+                        _token: $('meta[name="csrf-token"]').attr(
+                            'content') // include CSRF token
                     },
                     success: function(categories) {
                         let options = '<option value="">Select a category</option>';

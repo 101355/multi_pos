@@ -70,7 +70,7 @@ Route::middleware('auth:admin_users', 'verified')->group(function () {
 
     // Product
     Route::resource('product', ProductController::class);
-    Route::post('/category/subcategories', [ProductController::class, 'get_category'])->name('category.subcategories');
-
-    Route::get('warehouse-datatable', [ProductController::class, 'datatable'])->name('warehouse-datatable');
+    Route::post('/product/get_category', [ProductController::class, 'get_category'])->name('product.get_category');
+    Route::post('/product/get_subcategory', [ProductController::class, 'get_subcategory'])->name('product.get_subcategory');
+    Route::get('product-datatable', [ProductController::class, 'datatable'])->name('product-datatable');
 });

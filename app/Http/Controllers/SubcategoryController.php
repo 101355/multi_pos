@@ -85,9 +85,10 @@ class SubcategoryController extends Controller
 
     public function get_category(Request $request)
     {
-        $warehouse_id = $request->query('warehouse_id');
+        $warehouse_id = $request->warehouse_id;
         // info($warehouse_id);
         $categories = Category::where('warehouse_id', $warehouse_id)->get();
+
         return response()->json($categories);
     }
 }
