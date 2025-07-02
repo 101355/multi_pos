@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Subcategory;
 use App\Models\Unit;
+use App\Models\Warehouse;
 use App\Repositories\ProductRepository;
+use App\Services\ResponseService;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -41,36 +44,10 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
         try {
-            $data = $request->validate([
-                'warehouse_id'       => 'required|exists:warehouses,id',
-                'item_name'          => 'required|string|max:255',
-                'barcode'            => 'nullable|string|max:255|unique:products,barcode',
-                'description'        => 'nullable|string',
-                'expired_date'       => 'nullable|date',
-                'sub_category'       => 'nullable|string|max:255',
-                'category'           => 'required|string|max:255',
-                'item_type'          => 'nullable|string|max:255',
-                'quantity'           => 'required|numeric|min:0',
-                'alert_quantity'     => 'nullable|numeric|min:0',
-                'unit1'              => 'nullable|string|max:50',
-                'unit2'              => 'nullable|numeric|min:1',
-                'unit3'              => 'nullable|string|max:50',
-                'name1'              => 'nullable|string|max:255',
-                'name2'              => 'nullable|string|max:255',
-                'name3'              => 'nullable|string|max:255',
-                'purchase_price1'    => 'nullable|numeric|min:0',
-                'purchase_price2'    => 'nullable|numeric|min:0',
-                'purchase_price3'    => 'nullable|numeric|min:0',
-                'retail1'            => 'nullable|numeric|min:0',
-                'retail2'            => 'nullable|numeric|min:0',
-                'retail3'            => 'nullable|numeric|min:0',
-                'wholesale1'         => 'nullable|numeric|min:0',
-                'wholesale2'         => 'nullable|numeric|min:0',
-                'wholesale3'         => 'nullable|numeric|min:0',
-            ]);
+            $data = $request->validated(); // Get validated data
 
             // Auto-generate a 13-digit barcode if empty
             if (empty($data['barcode'])) {
@@ -87,6 +64,7 @@ class ProductController extends Controller
             return back()->withInput()->with('error', $e->getMessage());
         }
     }
+
 
     private function generateEAN13()
     {
@@ -116,23 +94,52 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        $warehouses = Warehouse::all();
+        $units = Unit::all();
+        $categorys = Category::all();
+        $sub_categorys = SubCategory::all();
+
+        return view('product.edit', compact('product', 'warehouses', 'units', 'categorys', 'sub_categorys'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
-        //
+        try {
+            $data = $request->validated();
+
+            // If barcode is empty, auto-generate
+            if (empty($data['barcode'])) {
+                $data['barcode'] = $this->generateEAN13();
+            }
+
+            // Adjust quantity
+            $data['quantity'] = $request->quantity;
+
+            $product->update($data);
+
+            return redirect()->route('product.index')->with('success', 'Successfully Updated');
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', $e->getMessage());
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy($id)
     {
-        //
+
+        try {
+            $this->productRepository->delete($id);
+
+            return ResponseService::success([], 'Successfully Deleted');
+        } catch (Exception $e) {
+            return ResponseService::fail($e->getMessage());
+        }
     }
 
 

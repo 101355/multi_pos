@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Create Product')
+@section('title', 'Edit Sub Category')
 
 @section('content')
     <div class="content">
@@ -12,7 +12,7 @@
             <div class="tw-flex tw-justify-between tw-items-center">
                 <div class="tw-flex tw-justify-between tw-items-center">
                     <div class="page-title-box">
-                        <h4 class="page-title">Create Product</h4>
+                        <h4 class="page-title">Edit Product</h4>
                     </div>
                 </div>
             </div>
@@ -24,22 +24,24 @@
             <div class="row">
                 <div class="col-12">
                     <x-card>
-                        <form method="post" action="{{ route('product.store') }}" class="tw-mt-6 tw-space-y-6"
+                        <form method="post" action="{{ route('product.update', $product->id) }}" class="tw-mt-6 tw-space-y-6"
                             id="submit">
                             @csrf
+                            @method('put')
 
                             <div class="row">
                                 <div class="form-group col-lg-4 mb-1">
                                     <x-input-label for="product_name" value="Product Name" />
                                     <x-text-input id="product_name" name="item_name" type="text"
-                                        class="tw-mt-1 tw-block tw-w-full" :value="old('product_name')" />
+                                        class="tw-mt-1 tw-block tw-w-full" value="{{ $product->item_name }}" />
+
                                 </div>
 
 
                                 <div class="form-group col-lg-4 mb-1">
                                     <x-input-label for="description" value="Product Description" />
                                     <x-text-input id="description" name="description" type="text"
-                                        class="tw-mt-1 tw-block tw-w-full" :value="old('description')" />
+                                        class="tw-mt-1 tw-block tw-w-full" value="{{ $product->description }}" />
                                 </div>
 
 
@@ -50,7 +52,7 @@
                                         <option value="">-- Select Warehouse --</option>
                                         @foreach ($warehouses as $warehouse)
                                             <option value="{{ $warehouse->id }}"
-                                                {{ old('warehouse_id') == $warehouse->id ? 'selected' : '' }}>
+                                                {{ $product->warehouse_id == $warehouse->id ? 'selected' : '' }}>
                                                 {{ $warehouse->name }}
                                             </option>
                                         @endforeach
@@ -62,7 +64,11 @@
                                     <x-input-label for="category_id" value="Category" />
                                     <x-select-input name="category" id="category_id" class="tw-mt-1 tw-block tw-w-full">
                                         <option value="">-- Select Category --</option>
-
+                                        @foreach ($categorys as $category)
+                                            <option value="{{ $category->id }}"
+                                                {{ $product->category == $category->id ? 'selected' : '' }}>
+                                                {{ $category->name }}</option>
+                                        @endforeach
                                     </x-select-input>
                                 </div>
 
@@ -71,6 +77,11 @@
                                     <x-select-input name="sub_category" id="sub_category_id"
                                         class="tw-mt-1 tw-block tw-w-full">
                                         <option value="">-- Select Sub Category --</option>
+                                        @foreach ($sub_categorys as $sub_category)
+                                            <option value="{{ $sub_category->id }}"
+                                                {{ $product->sub_category == $sub_category->id ? 'selected' : '' }}>
+                                                {{ $sub_category->name }}</option>
+                                        @endforeach
                                     </x-select-input>
                                 </div>
 
@@ -85,14 +96,14 @@
                                 <div class="form-group col-lg-4 mb-1">
                                     <x-input-label for="barcode" value="Barcode" />
                                     <x-text-input id="barcode" name="barcode" type="text"
-                                        class="tw-mt-1 tw-block tw-w-full" :value="old('barcode')" />
+                                        class="tw-mt-1 tw-block tw-w-full" value="{{ $product->barcode }}" />
                                 </div>
 
 
                                 <div class="form-group col-lg-4 mb-1">
                                     <x-input-label for="expired_date" value="Expired Date" />
                                     <x-text-input id="expired_date" name="expired_date" type="date"
-                                        class="tw-mt-1 tw-block tw-w-full" :value="old('expired_date')" />
+                                        class="tw-mt-1 tw-block tw-w-full" value="{{ $product->expired_date }}" />
                                 </div>
 
 
@@ -100,23 +111,42 @@
                                     <x-input-label for="item_type" value="Item Type" />
                                     <x-select-input name="item_type" id="item_type" class="tw-mt-1 tw-block tw-w-full">
                                         <option value="">-- Select Item Type --</option>
-                                        <option value="Stock">Stock</option>
-                                        <option value="Service">Service</option>
+                                        <option value="Stock" {{ $product->item_type == 'Stock' ? 'selected' : '' }}>Stock
+                                        </option>
+                                        <option value="Service" {{ $product->item_type == 'Service' ? 'selected' : '' }}>
+                                            Service</option>
                                     </x-select-input>
                                 </div>
 
 
                                 <div class="form-group col-lg-4 mb-1">
                                     <x-input-label for="quantity" value="Quantity" />
-                                    <x-text-input id="quantity" name="quantity" type="number"
-                                        class="tw-mt-1 tw-block tw-w-full" :value="old('quantity')" step="any" />
+                                    <x-text-input id="quantity" name="quantity" type="hidden"
+                                        class="tw-mt-1 tw-block tw-w-full" value="{{ $product->quantity }}"
+                                        step="any" />
+
+                                    @php
+
+                                        $unit2 = (float) ($product->unit2 ?? 1);
+                                        if ($unit2 == 0) {
+                                            $quantity = 0;
+                                        } else {
+                                            $quantity = floor((float) $product->quantity / $unit2);
+                                        }
+                                    @endphp
+
+                                    <x-text-input id="quantity1" name="quantity1" type="number"
+                                        class="tw-mt-1 tw-block tw-w-full" value="{{ $quantity }}" step="any"
+                                        readonly />
                                 </div>
+
 
 
                                 <div class="form-group col-lg-4 mb-1">
                                     <x-input-label for="alert_quantity" value="Alert Quantity" />
                                     <x-text-input id="alert_quantity" name="alert_quantity" type="number"
-                                        class="tw-mt-1 tw-block tw-w-full" :value="old('quantity')" step="any" />
+                                        class="tw-mt-1 tw-block tw-w-full" value="{{ $product->alert_quantity }}"
+                                        step="any" />
                                 </div>
 
                                 <table class="table table-bordered mt-3">
@@ -133,37 +163,42 @@
                                         <tr>
                                             <td>
                                                 <x-text-input id="unit1" name="unit1" type="number"
-                                                    class="tw-mt-1 tw-block tw-w-full" value="1" step="any"
-                                                    readonly />
+                                                    class="tw-mt-1 tw-block tw-w-full" value="{{ $product->unit1 }}"
+                                                    step="any" readonly />
                                             </td>
                                             <td>
                                                 <x-select-input name="name1" id="name1"
                                                     class="tw-mt-1 tw-block tw-w-full">
                                                     <option value="">-- Select Unit --</option>
                                                     @foreach ($units as $unit)
-                                                        <option value="{{ $unit->id }}">{{ $unit->name }}</option>
+                                                        <option value="{{ $unit->id }}"
+                                                            {{ $product->name1 == $unit->id ? 'selected' : '' }}>
+                                                            {{ $unit->name }}</option>
                                                     @endforeach
 
                                                 </x-select-input>
                                             </td>
                                             <td>
                                                 <x-text-input id="purchase_price1" name="purchase_price1" type="number"
-                                                    class="tw-mt-1 tw-block tw-w-full" :value="old('purchase_price1')" style="any" />
+                                                    class="tw-mt-1 tw-block tw-w-full"
+                                                    value="{{ $product->purchase_price1 }}" style="any" />
                                             </td>
                                             <td>
                                                 <x-text-input id="wholesale_price1" name="wholesale1" type="number"
-                                                    class="tw-mt-1 tw-block tw-w-full" :value="old('wholesale_price1')" style="any" />
+                                                    class="tw-mt-1 tw-block tw-w-full" value="{{ $product->wholesale1 }}"
+                                                    style="any" />
                                             </td>
                                             <td>
                                                 <x-text-input id="retail_price1" name="retail1" type="number"
-                                                    class="tw-mt-1 tw-block tw-w-full" :value="old('retail_price1')" style="any" />
+                                                    class="tw-mt-1 tw-block tw-w-full" value="{{ $product->retail1 }}"
+                                                    style="any" />
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
 
                                                 <x-text-input id="unit2" name="unit2" type="number"
-                                                    class="tw-mt-1 tw-block tw-w-full" :value="old('unit2')"
+                                                    class="tw-mt-1 tw-block tw-w-full" value="{{ $product->unit2 }}"
                                                     step="any" />
                                             </td>
                                             <td>
@@ -171,31 +206,33 @@
                                                     class="tw-mt-1 tw-block tw-w-full">
                                                     <option value="">-- Select Unit --</option>
                                                     @foreach ($units as $unit)
-                                                        <option value="{{ $unit->id }}">{{ $unit->name }}</option>
+                                                        <option value="{{ $unit->id }}"
+                                                            {{ $product->name2 == $unit->id ? 'selected' : '' }}>
+                                                            {{ $unit->name }}</option>
                                                     @endforeach
 
                                                 </x-select-input>
                                             </td>
                                             <td>
                                                 <x-text-input id="purchase_price2" name="purchase_price2" type="number"
-                                                    class="tw-mt-1 tw-block tw-w-full" :value="old('purchase_price2')"
-                                                    style="any" />
+                                                    class="tw-mt-1 tw-block tw-w-full"
+                                                    value="{{ $product->purchase_price2 }}" style="any" />
                                             </td>
                                             <td>
                                                 <x-text-input id="wholesale_price2" name="wholesale2" type="number"
-                                                    class="tw-mt-1 tw-block tw-w-full" :value="old('wholesale_price2')"
+                                                    class="tw-mt-1 tw-block tw-w-full" value="{{ $product->wholesale2 }}"
                                                     style="any" />
                                             </td>
                                             <td>
                                                 <x-text-input id="retail_price2" name="retail2" type="number"
-                                                    class="tw-mt-1 tw-block tw-w-full" :value="old('retail_price2')"
+                                                    class="tw-mt-1 tw-block tw-w-full" value="{{ $product->retail2 }}"
                                                     style="any" />
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
                                                 <x-text-input id="unit3" name="unit3" type="number"
-                                                    class="tw-mt-1 tw-block tw-w-full" :value="old('unit3')"
+                                                    class="tw-mt-1 tw-block tw-w-full" value="{{ $product->unit3 }}"
                                                     step="any" />
                                             </td>
                                             <td>
@@ -203,24 +240,26 @@
                                                     class="tw-mt-1 tw-block tw-w-full">
                                                     <option value="">-- Select Unit --</option>
                                                     @foreach ($units as $unit)
-                                                        <option value="{{ $unit->id }}">{{ $unit->name }}</option>
+                                                        <option value="{{ $unit->id }}"
+                                                            {{ $product->name3 == $unit->id ? 'selected' : '' }}>
+                                                            {{ $unit->name }}</option>
                                                     @endforeach
 
                                                 </x-select-input>
                                             </td>
                                             <td>
                                                 <x-text-input id="purchase_price3" name="purchase_price3" type="number"
-                                                    class="tw-mt-1 tw-block tw-w-full" :value="old('purchase_price3')"
-                                                    style="any" />
+                                                    class="tw-mt-1 tw-block tw-w-full"
+                                                    value="{{ $product->purchase_price3 }}" style="any" />
                                             </td>
                                             <td>
                                                 <x-text-input id="wholesale_price3" name="wholesale3" type="number"
-                                                    class="tw-mt-1 tw-block tw-w-full" :value="old('wholesale_price3')"
+                                                    class="tw-mt-1 tw-block tw-w-full" value="{{ $product->wholesale3 }}"
                                                     style="any" />
                                             </td>
                                             <td>
                                                 <x-text-input id="retail_price3" name="retail3" type="number"
-                                                    class="tw-mt-1 tw-block tw-w-full" :value="old('retail_price3')"
+                                                    class="tw-mt-1 tw-block tw-w-full" value="{{ $product->retail3 }}"
                                                     style="any" />
                                             </td>
                                         </tr>
