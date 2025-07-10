@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\ResponseService;
 use Illuminate\Http\Request;
 use App\Http\Requests\CategoryRequest;
+use App\Models\Warehouse;
 use Exception;
 use App\Repositories\CategoryRepository;
 
@@ -17,12 +18,15 @@ class CategoryController extends Controller
     }
     public function index()
     {
+
         return view('category.index');
     }
 
     public function create()
     {
-        return view('category.create');
+
+        $warehouses = Warehouse::all();
+        return view('category.create', compact('warehouses'));
     }
 
     public function store(CategoryRequest $request)
@@ -30,6 +34,7 @@ class CategoryController extends Controller
         try {
             $this->categoryRepository->create([
                 'name' => $request->name,
+                'warehouse_id' => $request->warehouse_id,
             ]);
             return redirect()->route('category.index')->with('success', 'Successfully Created');
         } catch (Exception $e) {
@@ -40,7 +45,9 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $category = $this->categoryRepository->find($id);
-        return view('category.edit', compact('category'));
+        $warehouses = Warehouse::all();
+
+        return view('category.edit', compact('category', 'warehouses'));
     }
 
     public function update($id, CategoryRequest $request)
@@ -48,6 +55,7 @@ class CategoryController extends Controller
         try {
             $this->categoryRepository->update($id, [
                 'name' => $request->name,
+                'warehouse_id' => $request->warehouse_id,
             ]);
             return redirect()->route('category.index')->with('success', 'Successfully Updated');
         } catch (Exception $e) {

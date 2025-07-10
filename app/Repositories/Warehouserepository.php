@@ -3,17 +3,17 @@
 namespace App\Repositories;
 
 use Carbon\Carbon;
-use App\Models\Category;
+use App\Models\Warehouse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use App\Repositories\Contracts\BaseRepository;
 
-class CategoryRepository implements BaseRepository
+class Warehouserepository implements BaseRepository
 {
     protected $model;
     public function __construct()
     {
-        $this->model = Category::class;
+        $this->model = Warehouse::class;
     }
 
     public function find($id)
@@ -38,7 +38,6 @@ class CategoryRepository implements BaseRepository
         return $record;
     }
 
-
     public function delete($id)
     {
         $record = $this->model::find($id);
@@ -47,18 +46,15 @@ class CategoryRepository implements BaseRepository
 
     public function datatable(Request $request)
     {
-        $model = Category::query();
+        $model = Warehouse::query();
         return DataTables::eloquent($model)
-            ->editColumn('created_at', function ($category) {
-                return Carbon::parse($category->created_at)->format('Y-m-d H:i:s');
+            ->editColumn('created_at', function ($warehouse) {
+                return Carbon::parse($warehouse->created_at)->format('Y-m-d H:i:s');
             })
-            ->addColumn('warehouse_id', function ($data) {
-                return $data->warehouse ? $data->warehouse->name : '-';
+            ->addColumn('action', function ($warehouse) {
+                return view('warehouse._action', compact('warehouse'));
             })
-            ->addColumn('action', function ($category) {
-                return view('category._action', compact('category'));
-            })
-            ->addColumn('responsive-icon', function ($category) {
+            ->addColumn('responsive-icon', function ($warehouse) {
                 return null;
             })
             ->toJson();

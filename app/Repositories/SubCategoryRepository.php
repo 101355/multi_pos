@@ -54,6 +54,9 @@ class SubCategoryRepository implements BaseRepository
             ->addColumn('category_id', function ($data) {
                 return $data->category ? $data->category->name : '-';
             })
+            ->addColumn('warehouse_id', function ($data) {
+                return $data->warehouse ? $data->warehouse->name : '-';
+            })
             ->addColumn('action', function ($sub_category) {
                 return view('sub-category._action', compact('sub_category'));
             })

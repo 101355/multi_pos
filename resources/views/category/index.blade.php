@@ -33,6 +33,7 @@
                             <tr>
                                 <th class="text-center"></th>
                                 <th class="text-center">Name</th>
+                                <th class="text-center">Warehouse</th>
                                 <th class="text-center">Date</th>
                                 <th class="text-center no-sort no-search">Action</th>
                             </tr>
@@ -68,6 +69,10 @@
                     },
                     {
                         data: 'name',
+                        class: 'text-center'
+                    },
+                    {
+                        data: 'warehouse_id',
                         class: 'text-center'
                     },
                     {

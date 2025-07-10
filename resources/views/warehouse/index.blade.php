@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Sub Category')
+@section('title', 'Warehouse')
 
 @section('content')
     <div class="content">
@@ -12,11 +12,11 @@
             <div class="tw-flex tw-justify-between tw-items-center">
                 <div class="tw-flex tw-justify-between tw-items-center">
                     <div class="page-title-box">
-                        <h4 class="page-title">Sub Category</h4>
+                        <h4 class="page-title">Warehouse</h4>
                     </div>
                 </div>
                 <div class="">
-                    <x-create-button href="{{ route('sub-category.create') }}"><i
+                    <x-create-button href="{{ route('warehouse.create') }}"><i
                             class="fas fa-plus-circle">Create</i></x-create-button>
                 </div>
             </div>
@@ -32,10 +32,9 @@
                         <thead>
                             <tr>
                                 <th class="text-center"></th>
-                                <th class="text-center">Category Name</th>
-                                <th class="text-center">Sub Category Name</th>
-                                <th class="text-center">Warehouse</th>
-                                <th class="text-center">Date</th>
+                                <th class="text-center">Name</th>
+                                <th class="text-center">Address</th>
+                                <th class="text-center">Description</th>
                                 <th class="text-center no-sort no-search">Action</th>
                             </tr>
                         </thead>
@@ -59,36 +58,30 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('sub-category-datatable') }}",
-                    data: function(d) {
-
-                    }
+                    url: "{{ route('warehouse-datatable') }}",
+                    data: function(d) {}
                 },
                 columns: [{
                         data: 'responsive-icon',
                         class: 'text-center'
                     },
                     {
-                        data: 'category_id',
-                        class: 'text-center'
-                    },
-
-                    {
                         data: 'name',
                         class: 'text-center'
                     },
                     {
-                        data: 'warehouse_id',
+                        data: 'address',
                         class: 'text-center'
                     },
                     {
-                        data: 'created_at',
+                        data: 'description',
                         class: 'text-center'
                     },
                     {
                         data: 'action',
                         class: 'text-center'
                     }
+
                 ],
                 order: [
                     [2, 'desc']
